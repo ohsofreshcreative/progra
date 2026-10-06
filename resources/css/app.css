@@ -10,39 +10,39 @@
   /* base */
   --body: 42 63 80; /* #2A3F50 */
 
-/* PRIMARY (lewa kolumna – granat) */
---primary: 23 28 132;   /* #171C84 */
---p-hover: 5 6 26;      /* #05061A */
+/* PRIMARY (pomarańczowy) */
+--primary: 240 124 0;   /* #F07C00 */
+--p-hover: 200 103 0;   /* #C86700 */
 
---p-50: 200 202 240;    /* #C8CAF0 */
---p-100: 168 170 221;   /* #A8AADD */
---p-200: 133 136 204;   /* #8588CC */
---p-300: 92 96 182;     /* #5C60B6 */
---p-400: 57 61 162;     /* #393DA2 */
---p-500: 23 28 132;     /* #171C84 */
---p-600: 19 23 110;     /* #13176E */
---p-700: 15 19 88;      /* #0F1358 */
---p-800: 12 14 66;      /* #0C0E42 */
---p-900: 8 9 44;        /* #08092C */
---p-dark: 5 6 26;       /* #05061A */
+--p-50: 252 217 180;    /* #FCD9B4 */
+--p-100: 250 200 148;   /* #FAC894 */
+--p-200: 248 186 121;   /* #F8BA79 */
+--p-300: 245 169 87;    /* #F5A957 */
+--p-400: 244 143 35;    /* #F48F23 */
+--p-500: 240 124 0;     /* #F07C00 */
+--p-600: 200 103 0;     /* #C86700 */
+--p-700: 160 83 0;      /* #A05300 */
+--p-800: 120 62 0;      /* #783E00 */
+--p-900: 80 41 0;       /* #502900 */
+--p-dark: 48 25 0;      /* #301900 */
 
 --action: rgb(23, 28, 132);
 
-/* SECONDARY (niebieski) */
---secondary: 38 130 232;  /* #2682E8 */
---s-hover: 32 108 193;    /* #206CC1 */
+/* SECONDARY (szary) */
+--secondary: 153 153 153;  /* #999999 */
+--s-hover: 160 83 0;    /* #808080 */
 
---s-50: 212 230 250;    /* #D4E6FA */
---s-100: 183 213 247;   /* #B7D5F7 */
---s-200: 146 192 243;   /* #92C0F3 */
---s-300: 110 172 240;   /* #6EACF0 */
---s-400: 74 151 236;    /* #4A97EC */
---s-500: 38 130 232;    /* #2682E8 */
---s-600: 32 108 193;    /* #206CC1 */
---s-700: 25 87 155;     /* #19579B */
---s-800: 19 65 116;     /* #134174 */
---s-900: 13 43 77;      /* #0D2B4D */
---s-dark: 8 26 46;      /* #081A2E */
+--s-50: 235 235 235;    /* #EBEBEB */
+--s-100: 221 221 221;   /* #DDDDDD */
+--s-200: 204 204 204;   /* #CCCCCC */
+--s-300: 187 187 187;   /* #BBBBBB */
+--s-400: 170 170 170;   /* #AAAAAA */
+--s-500: 153 153 153;   /* #999999 */
+--s-600: 128 128 128;   /* #808080 */
+--s-700: 102 102 102;   /* #666666 */
+--s-800: 77 77 77;      /* #4D4D4D */
+--s-900: 51 51 51;      /* #333333 */
+--s-dark: 20 15 10;     /* #1F1F1F */
 
 
 /* THIRD (różowy/fioletowy) */
@@ -62,9 +62,9 @@
 --t-dark: 50 26 48;   /* #321A30 */
 
   /* neutrals / fixed backgrounds */
-  --text-body: rgb(var(--p-800));
+  --text-body: rgb(var(--s-900));
   --gray: #2a3f50;
-  --bg: #F4F9FF;
+  --bg: #262626;
   --bg-light: rgb(var(--s-100));
   --bg-lighter: rgb(var(--s-50));
   --bg-brand: #002704;
@@ -110,7 +110,7 @@
   --color-third-100: rgb(var(--t-100));
   --color-third-200: rgb(var(--t-200));
   --color-third-300: rgb(var(--t-300));
-  --color-third-400: rgb(var(--t-400));
+  --color-third-400: rgb(var(--t-400)); 
   --color-third-500: rgb(var(--t-500));
   --color-third-600: rgb(var(--t-600));
   --color-third-700: rgb(var(--t-700));
@@ -121,6 +121,7 @@
   --color-gray: var(--gray);
   --color-action: var(--action);
 
+  --color-background: var(--bg);
   --color-page: var(--bg);
   --color-background-light: var(--bg-light);
   --color-background-brand: var(--bg-brand);
@@ -133,10 +134,30 @@
   --color-secondary-lighter: var(--color-secondary-100);
 
   --color-muted: var(--color-secondary-500);
-  --gradient: linear-gradient(90deg, #2265CB 0%, #181D84 100%);
-  --gradient-light: linear-gradient(-90deg, #0E3A2D 0%, #0A533D 100%);
-  --gradient-s: linear-gradient(-90deg, #DE855D 0%, #D37A51 100%);
+  --gradient: linear-gradient(90deg, #060608 0%, #1D1007 100%);
+  --gradient-light: linear-gradient(180deg, #F9FAFB 0%, #FFF0D9 100%);
+  --gradient-dark: linear-gradient(-90deg, #1D1007 0%, #2D1707 100%);
+  --background-image-gradient-dark: var(--gradient-dark);
 
+}
+
+@layer components {
+  .has-acf-block-label {
+    position: relative;
+  }
+
+  .has-acf-block-label::before {
+    content: attr(data-acf-block-label);
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 50;
+    padding: 0.25rem 0.5rem;
+    color: white;
+    background: rgb(var(--primary));
+    font: 12px/1.2 sans-serif;
+    pointer-events: none;
+  }
 }
 
 @utility m-header {
@@ -180,6 +201,11 @@
 @import '../css/blocks/map.scss';
 @import '../css/blocks/catalogues.scss';
 @import '../css/blocks/action.scss';
+@import '../css/blocks/support.scss';
+@import '../css/blocks/industries.scss';
+@import '../css/blocks/advantages.scss';
+@import '../css/blocks/steps.scss';
+@import '../css/blocks/numbers.scss';
 /*-- NOT USED ---*/
 @import '../css/blocks/accordion.scss';
 @import '../css/blocks/cards.scss';
@@ -187,7 +213,6 @@
 @import '../css/blocks/contact.scss';
 @import '../css/blocks/faq.scss';
 @import '../css/blocks/image.scss';
-@import '../css/blocks/numbers.scss';
 @import '../css/blocks/overlap.scss';
 @import '../css/blocks/proces.scss';
 @import '../css/blocks/tabs.scss';

@@ -4,6 +4,7 @@ namespace App\Blocks;
 
 use Log1x\AcfComposer\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
+use App\Support\SectionBackgrounds;
 use App\Support\SectionClasses;
 
 class Numbers extends Block
@@ -14,7 +15,7 @@ class Numbers extends Block
 	public $category = 'formatting';
 	public $icon = 'yes-alt';
 	public $keywords = ['numbers', 'kafelki'];
-	public $mode = 'edit';
+	public $mode = 'auto';
 	public $supports = [
 		'align' => false,
 		'mode' => true,
@@ -32,6 +33,21 @@ class Numbers extends Block
 			->addTab('Kafelki', ['placement' => 'top'])
 			->addText('header', [
 				'label' => 'Nagłówek',
+			])
+			->addWysiwyg('text', [
+				'label' => 'Treść',
+				'tabs' => 'all',
+				'toolbar' => 'full',
+				'media_upload' => true,
+			])
+			->addLink('button', [
+				'label' => 'Przycisk',
+				'return_format' => 'array',
+			])
+			->addImage('image', [
+				'label' => 'Zdjęcie',
+				'return_format' => 'array',
+				'preview_size' => 'thumbnail',
 			])
 			->addRepeater('r_numbers', [
 				'label' => 'Kafelki',
@@ -73,15 +89,7 @@ class Numbers extends Block
 			])
 			->addSelect('background', [
 				'label' => 'Kolor tła',
-				'choices' => [
-					'none' => 'Brak (domyślne)',
-					'section-white' => 'Białe',
-					'section-light' => 'Jasne',
-					'section-gray' => 'Szare',
-					'section-brand' => 'Marki',
-					'section-gradient' => 'Gradient',
-					'section-dark' => 'Ciemne',
-				],
+				'choices' => SectionBackgrounds::choices(),
 				'default_value' => 'none',
 				'ui' => 0, 
 				'allow_null' => 0,
@@ -94,6 +102,9 @@ class Numbers extends Block
 	{
 		$fields = [
 			'header' => get_field('header'),
+			'text' => get_field('text'),
+			'button' => get_field('button'),
+			'image' => get_field('image'),
 			'r_numbers' => get_field('r_numbers'),
 
 			'section_id' => get_field('section_id'),

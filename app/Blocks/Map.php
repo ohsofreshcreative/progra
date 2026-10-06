@@ -4,6 +4,7 @@ namespace App\Blocks;
 
 use Log1x\AcfComposer\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
+use App\Support\SectionBackgrounds;
 use App\Support\SectionClasses;
 
 class Map extends Block
@@ -32,10 +33,16 @@ class Map extends Block
 			/*--- GROUP ---*/
 			->addTab('Elementy', ['placement' => 'top'])
 			->addGroup('g_map', ['label' => ''])
-			->addText('header', ['label' => 'Nagłówek'])
 			->addTextarea('map', [
 				'label' => 'Kod mapy',
 				'rows' => 4,
+			])
+			->addText('header', ['label' => 'Tytuł'])
+			->addWysiwyg('text', [
+				'label' => 'Treść',
+				'tabs' => 'all',
+				'toolbar' => 'full',
+				'media_upload' => true,
 			])
 			->addLink('button', [
 				'label' => 'Przycisk',
@@ -58,6 +65,13 @@ class Map extends Block
 				'ui_on_text' => 'Tak',
 				'ui_off_text' => 'Nie',
 			])
+
+			->addTrueFalse('flip', [
+				'label' => 'Odwrotna kolejność',
+				'ui' => 1,
+				'ui_on_text' => 'Tak',
+				'ui_off_text' => 'Nie',
+			])
 			->addTrueFalse('wide', [
 				'label' => 'Szeroka kolumna',
 				'ui' => 1,
@@ -72,15 +86,7 @@ class Map extends Block
 			])
 			->addSelect('background', [
 				'label' => 'Kolor tła',
-				'choices' => [
-					'none' => 'Brak (domyślne)',
-					'section-white' => 'Białe',
-					'section-light' => 'Jasne',
-					'section-gray' => 'Szare',
-					'section-brand' => 'Marki',
-					'section-gradient' => 'Gradient',
-					'section-dark' => 'Ciemne',
-				],
+				'choices' => SectionBackgrounds::choices(),
 				'default_value' => 'none',
 				'ui' => 0, // Ulepszony interfejs
 				'allow_null' => 0,

@@ -4,6 +4,7 @@ namespace App\Blocks;
 
 use Log1x\AcfComposer\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
+use App\Support\SectionBackgrounds;
 use App\Support\SectionClasses;
 
 class Contact extends Block
@@ -40,6 +41,12 @@ class Contact extends Block
 				'preview_size' => 'thumbnail',
 			])
 			->addText('header', ['label' => 'Tytuł'])
+			->addWysiwyg('text', [
+				'label' => 'Treść',
+				'tabs' => 'all',
+				'toolbar' => 'full',
+				'media_upload' => true,
+			])
 			->addText('phone', [
 				'label' => 'Numer telefonu',
 			])
@@ -50,6 +57,12 @@ class Contact extends Block
 				'label' => 'Adres',
 				'rows' => 3,
 				'new_lines' => 'br',
+			])
+			->addWysiwyg('hours', [
+				'label' => 'Godziny otwarcia',
+				'tabs' => 'all',
+				'toolbar' => 'full',
+				'media_upload' => true,
 			])
 			->endGroup()
 			/*--- TAB #2 ---*/
@@ -97,15 +110,7 @@ class Contact extends Block
 			])
 			->addSelect('background', [
 				'label' => 'Kolor tła',
-				'choices' => [
-					'none' => 'Brak (domyślne)',
-					'section-white' => 'Białe',
-					'section-light' => 'Jasne',
-					'section-gray' => 'Szare',
-					'section-brand' => 'Marki',
-					'section-gradient' => 'Gradient',
-					'section-dark' => 'Ciemne',
-				],
+				'choices' => SectionBackgrounds::choices(),
 				'default_value' => 'none',
 				'ui' => 0,
 				'allow_null' => 0,

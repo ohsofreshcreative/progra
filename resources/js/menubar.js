@@ -4,9 +4,15 @@ $(document).ready(function () {
   'use strict';
 
   let c, currentScrollTop = 0;
-  const navbar = $('.fixed-top');
+  const navbar = $('.masthead.fixed-top');
+  const desktopViewport = window.matchMedia('(min-width: 769px)');
 
   $(window).on('scroll', function () {
+    if (desktopViewport.matches) {
+      navbar.removeClass('scrollUp scrollDown scrollTop');
+      return;
+    }
+
     const a = $(window).scrollTop();
     const b = navbar.height();
 

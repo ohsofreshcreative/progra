@@ -25,6 +25,11 @@ class Octa extends Options
 				'return_format' => 'array',
 				'preview_size'  => 'medium',
 			])
+			->addImage('background_grid', [
+				'label'         => 'Grafika kratki w tle',
+				'return_format' => 'array',
+				'preview_size'  => 'medium',
+			])
 			->addText('header', ['label' => 'Nagłówek'])
 			->addWysiwyg('txt', [
 				'label'        => 'Treść',

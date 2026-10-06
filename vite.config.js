@@ -6,11 +6,11 @@ import path from 'path'
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const wpOrigin = env.WP_HOME || 'http://tsp.local'
+  const wpOrigin = env.WP_HOME || 'http://progra.local'
 
   return {
     server: {
-      host: 'tsp.local',
+      host: 'progra.local',
       port: 5981,
       strictPort: true,
       cors: true,
@@ -22,13 +22,13 @@ export default defineConfig(({ command, mode }) => {
       },
       hmr: {
         protocol: 'ws',
-        host: 'tsp.local',
+        host: 'progra.local',
         port: 5981,
       },
     },
 
     base: command === 'build'
-      ? '/wp-content/themes/tsp/public/build/'
+      ? '/wp-content/themes/progra/public/build/'
       : '/build/',
 
     plugins: [

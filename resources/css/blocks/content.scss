@@ -1,10 +1,20 @@
 .b-content {
+	.__content .__txt p:last-of-type {
+		opacity:.6;
+	}
 	.__txt {
-		h1, h2, h3, h4, h5, h6 {
-			color:var(--color-primary);
-			font-size:20px !important;
-			margin-top:16px
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			color: var(--color-primary);
+			font-size: 20px !important;
+			margin-top: 16px
 		}
+
 		p {
 			margin-bottom: 16px;
 		}
@@ -28,22 +38,21 @@
 			}
 
 			li {
-				position: relative;
 				margin-bottom: 0.5em;
-				display: flex;
-				gap: 8px;
-				align-items: center;
+				display: block;
+				border-top: 1px dashed var(--color-primary);
+				margin-top: 16px;
+				padding-top: 16px;
+				color:var(--color-secondary-600);
+
+				strong {
+					font-size:18px;
+					color:var(--text-body);
+				}
 
 				&::before {
-					content: '';
-					display: inline-block;
-					width: 10px;
-					height: 10px;
-					background-image: url('@images/pointer.svg');
-					background-size: contain;
-					background-repeat: no-repeat;
-					background-position: center;
-					flex-shrink: 0;
+					content: none;
+					display: none;
 				}
 			}
 		}
@@ -52,9 +61,9 @@
 
 
 
-/*--- BRAK PUNKTATORÓW ---*/
+/*--- PUNKTATORY ---*/
 
-.b-content.no-list {
+.b-content.has-bullets {
 	.__txt {
 		ul {
 			margin-top: 8px;
@@ -66,6 +75,7 @@
 				display: list-item;
 				position: static;
 				margin-bottom: 0.5em;
+				padding-left: 0;
 
 				&::before {
 					content: none;

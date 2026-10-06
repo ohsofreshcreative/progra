@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.querySelector('.b-reviews')) import('./blocks/reviews');
   if (document.querySelector('.b-tabs')) import('./blocks/tabs');
   if (document.querySelector('.b-slider')) import('./blocks/slider');
-  if (document.querySelector('.b-values')) import('./blocks/values');
   if (document.querySelector('.b-catalogues')) import('./blocks/catalogues');
+  if (document.querySelector('.b-industries')) import('./blocks/industries');
 });
 
 /*--- NOT USED ---*/
@@ -279,6 +279,5 @@ acf.addAction('ready_field/name=amelia_service', function($field) {
     $block.data('amelia-initialized', true);
     initializeAmeliaBlock($block);
 });
-
 
 

@@ -1,7 +1,7 @@
 <section
 	data-gsap-anim="section"
 	@if(!empty($section_id)) id="{{ $section_id }}" @endif
-	@class([ 'b-logos relative -smt overflow-hidden' ,
+	@class([ 'b-logos relative -smt overflow-hidden py-10!' ,
 	$sectionClass=> filled($sectionClass),
 	$section_class => filled($section_class),
 	$background => filled($background) && $background !== 'none',
@@ -14,14 +14,14 @@
 	@endif
 
 	@if (!empty($g_logos['gallery']))
-	<div class="relative w-full overflow-hidden my-6">
+	<div class="relative w-full overflow-hidden">
 
 		<div class="flex w-max items-center animate-infinite-scroll py-2">
 
 			@for ($copy = 0; $copy < 4; $copy++)
 				@foreach ($g_logos['gallery'] as $image)
-				<div class="bg-white flex items-center justify-center p-4 rounded-[12px] shadow-sm w-48 h-24 shrink-0 mr-8" @if($copy> 0) aria-hidden="true" @endif>
-				<img src="{{ $image['url'] }}" alt="{{ $image['alt'] ?? '' }}" class="max-h-12 w-auto max-w-[80%] object-contain transition-all duration-300">
+				<div class="flex items-center justify-center w-48 h-24 shrink-0 mr-8" @if($copy> 0) aria-hidden="true" @endif>
+				<img src="{{ $image['url'] }}" alt="{{ $image['alt'] ?? '' }}" class="max-h-12 w-auto max-w-[80%] object-contain transition-all duration-300 grayscale-100">
 		</div>
 		@endforeach
 		@endfor

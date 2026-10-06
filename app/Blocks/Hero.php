@@ -4,6 +4,7 @@ namespace App\Blocks;
 
 use Log1x\AcfComposer\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
+use App\Support\SectionBackgrounds;
 use App\Support\SectionClasses;
 
 class Hero extends Block
@@ -14,7 +15,7 @@ class Hero extends Block
 	public $category = 'formatting';
 	public $icon = 'align-full-width';
 	public $keywords = ['tresc', 'zdjecie'];
-	public $mode = 'edit';
+	public $mode = 'preview';
 	public $supports = [
 		'align' => false,
 		'mode' => true,
@@ -39,6 +40,7 @@ class Hero extends Block
 				'label' => 'Wideo (w tle)',
 				'return_format' => 'url',
 			])
+			->addText('label', ['label' => 'Etykieta nad tytułem'])
 			->addText('title', ['label' => 'Tytuł'])
 			->addWysiwyg('text', [
 				'label' => 'Treść',
@@ -97,15 +99,7 @@ class Hero extends Block
 			])
 			->addSelect('background', [
 				'label' => 'Kolor tła',
-				'choices' => [
-					'none' => 'Brak (domyślne)',
-					'section-white' => 'Białe',
-					'section-light' => 'Jasne',
-					'section-gray' => 'Szare',
-					'section-brand' => 'Marki',
-					'section-gradient' => 'Gradient',
-					'section-dark' => 'Ciemne',
-				],
+				'choices' => SectionBackgrounds::choices(),
 				'default_value' => 'none',
 				'ui' => 0, // Ulepszony interfejs
 				'allow_null' => 0,

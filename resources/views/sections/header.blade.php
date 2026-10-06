@@ -1,108 +1,83 @@
 @php
-use App\Walkers\DropdownWalker;
 use App\Walkers\MobileDropdownWalker;
 @endphp
 
-<header x-data="{ mobileOpen: false }" class="relative top-0 z-50 bg-white masthead fixed-top mx-0 lg:mx-6 rounded-b-2xl lg:rounded-b-[48px]">
+<header
+	x-data="{
+		mobileOpen: false,
+		desktopOpen: true,
+		isDesktop: window.matchMedia('(min-width: 769px)').matches,
+		get menuOpen() { return this.isDesktop ? this.desktopOpen : this.mobileOpen },
+		toggleMenu() {
+			if (this.isDesktop) this.desktopOpen = !this.desktopOpen;
+			else this.mobileOpen = !this.mobileOpen;
+		},
+		init() {
+			this.viewport = window.matchMedia('(min-width: 769px)');
+			this.onViewportChange = (event) => { this.isDesktop = event.matches };
+			this.viewport.addEventListener('change', this.onViewportChange);
+		},
+		destroy() { this.viewport.removeEventListener('change', this.onViewportChange) }
+	}"
+	class="relative top-0 z-50 bg-black masthead fixed-top">
 
-	<!-- Desktop Header -->
-	<div class="items-center justify-between hidden h-full py-4 px-12 mx-auto lg:flex">
+	<div class="mobile-header flex items-center justify-between p-4">
 		<a class="brand shrink-0" href="{{ home_url('/') }}">
 			@if ($logo)
-			<img src="{{ $logo['url'] }}" alt="{{ $logo['alt'] ?? 'Logo' }}" class="w-auto h-12">
+			<img src="{{ $logo['url'] }}" alt="{{ $logo['alt'] ?? 'Logo' }}" class="w-auto h-10">
 			@else
-			<span class="text-xl font-bold">{{ $siteName }}</span>
+			<span>{{ $siteName }}</span>
 			@endif
 		</a>
-		@if (has_nav_menu('primary_navigation'))
-		<nav class="ml-6 lg:ml-15 nav-primary w-full" aria-label="{{ wp_get_nav_menu_name('primary_navigation') }}">
-			{!! wp_nav_menu([
-			'theme_location' => 'primary_navigation',
-			'menu_class' => 'nav flex gap-x-3 lg:gap-x-6 text-lg font-medium justify-center items-center',
-			'container' => false,
-			'echo' => false,
-			'walker' => new DropdownWalker(),
-			]) !!}
-		</nav>
-		@endif
-
-
-		<div class="">
-			<a href="/kontakt/" class="block w-full btn btn-secondary">
-				Kontakt
-			</a>
-		</div>
-	</div>
-
-	<!-- Mobile Header Bar -->
-	<div class="flex items-center justify-between p-4 mobile-menu fixed-top lg:hidden">
-		<a class="brand shrink-0" href="{{ home_url('/') }}">
-			@if ($logo)
-			<img src="{{ $logo['url'] }}" alt="{{ $logo['alt'] ?? 'Logo' }}" class="w-auto h-12">
-			@else
-			<span class="text-lg font-bold">{{ $siteName }}</span>
-			@endif
-		</a>
-		<button
-			@click.stop="mobileOpen = !mobileOpen"
-			class="p-2 primary bg-white rounded-md"
-			aria-expanded="mobileOpen"
-			aria-controls="mobile-menu-panel">
-			<span class="sr-only">Otwórz menu główne</span>
-			<svg x-show="!mobileOpen" class="block w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-			</svg>
-			<svg x-show="mobileOpen" class="block w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" style="display: none;">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+		<button @click="mobileOpen = !mobileOpen" class="p-2 text-white"
+			:aria-expanded="mobileOpen" aria-expanded="false" aria-controls="mobile-menu-panel"
+			aria-label="Otwórz menu główne">
+			<svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+				<path stroke-linecap="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
 			</svg>
 		</button>
 	</div>
 
-	<!-- Mobile Menu Panel -->
-	<div
-		id="mobile-menu-panel"
-		x-show="mobileOpen"
-		@click.away="mobileOpen = false"
-		@keydown.escape.window="mobileOpen = false"
-		x-transition:enter="transition ease-out duration-200"
-		x-transition:enter-start="opacity-0 transform translate-x-full"
-		x-transition:enter-end="opacity-100 transform translate-x-0"
-		x-transition:leave="transition ease-in duration-150"
-		x-transition:leave-start="opacity-100 transform translate-x-0"
-		x-transition:leave-end="opacity-0 transform translate-x-full"
-		class="mobile-menu fixed top-0 right-0 bottom-0 w-full h-full bg-primary shadow-xl z-[51] overflow-y-auto md:hidden"
-		aria-label="Menu mobilne">
-		<div class="p-4 relative z-10">
-			<div class="flex items-center justify-between mb-6">
-				<span class=""><a class="brand shrink-0" href="{{ home_url('/') }}"><img src="{{ $logo['url'] }}" alt="{{ $logo['alt'] ?? 'Logo' }}" class="w-auto h-12 invert grayscale"></a></span>
-				<button
-					@click="mobileOpen = false"
-					class="p-2 text-white rounded-md">
-					<span class="sr-only">Zamknij menu</span>
-					<svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-					</svg>
-				</button>
-			</div>
+	<!-- Collapsible desktop sidebar / mobile menu -->
+	<div @keydown.escape="if (!isDesktop) mobileOpen = false" class="mobile-menu bg-black border-r border-dashed border-primary-800" :class="{ 'is-collapsed': !menuOpen }">
+		<div class="flex items-center justify-between px-6 pt-8 pb-6" :class="{ '!px-2': !menuOpen }">
+			<a x-show="menuOpen" class="brand shrink-0" href="{{ home_url('/') }}">
+				@if ($logo)
+				<img src="{{ $logo['url'] }}" alt="{{ $logo['alt'] ?? 'Logo' }}" class="w-auto h-8">
+				@else
+				<span>{{ $siteName }}</span>
+				@endif
+			</a>
+			<button
+				@click="toggleMenu()"
+				class="p-2 text-primary border border-primary radius shrink-0 hover:bg-primary hover:text-white"
+				:aria-expanded="menuOpen"
+				:aria-label="menuOpen ? (isDesktop ? 'Zwiń menu główne' : 'Zamknij menu główne') : 'Rozwiń menu główne'"
+				aria-expanded="true"
+				aria-label="Zwiń menu główne"
+				aria-controls="mobile-menu-panel">
+				<svg class="w-6 h-6" :class="{ 'rotate-180': !menuOpen }" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="m12 6-6 6 6 6M6 12h12" />
+				</svg>
+			</button>
+		</div>
 
+		<div id="mobile-menu-panel" x-show="menuOpen" class="px-6 pb-6 overflow-y-auto">
 			@if (has_nav_menu('primary_navigation'))
-			<nav class="flex flex-col space-y-1 mt-20">
+			<nav aria-label="{{ wp_get_nav_menu_name('primary_navigation') }}">
 				{!! wp_nav_menu([
-				'theme_location' => 'primary_navigation',
-				'menu_class' => 'nav-mobile flex flex-col space-y-2',
-				'container' => false,
-				'echo' => false,
-				'walker' => new MobileDropdownWalker(),
+					'theme_location' => 'primary_navigation',
+					'menu_class' => 'nav-mobile flex flex-col',
+					'container' => false,
+					'echo' => false,
+					'walker' => new MobileDropdownWalker(),
 				]) !!}
 			</nav>
 			@endif
 
 			<div class="mt-8">
-				<a href="/kontakt/" class="block w-full btn btn-secondary">
-					Kontakt
-				</a>
+				<a href="tel:413114466" class="block w-full btn btn-primary">41 311 44 66</a>
 			</div>
 		</div>
-
 	</div>
 </header>

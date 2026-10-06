@@ -10,38 +10,55 @@
 	])>
 
 	<div class="__wrapper c-main">
-		<div class="">
-			<div class="__top">
-				@if (!empty($g_proces['header']))
-				<h3 data-gsap-element="header" class=" m-header">{{ strip_tags($g_proces['header']) }}</h3>
-				@endif
-				<div data-gsap-element="txt" class="">{{ strip_tags($g_proces['txt']) }}</div>
-			</div>
+		<div class="__top">
+			@if (!empty($g_proces['header']))
+			<h2 data-gsap-element="header" class="text-h2 m-header">{{ $g_proces['header'] }}</h2>
+			@endif
+			@if (!empty($g_proces['txt']))
+			<div data-gsap-element="txt" class="__txt">{!! $g_proces['txt'] !!}</div>
+			@endif
 		</div>
 
 		@if (!empty($r_proces))
 		@php
 		$repeater_count = count($r_proces);
-		$grid_class = 'lg:grid-cols-4'; // Domyślna klasa
+		$grid_class = 'lg:grid-cols-4';
 		if ($repeater_count === 3) {
 		$grid_class = 'lg:grid-cols-3';
 		}
 		@endphp
-		<div class="__repeater gap-8 grid grid-cols-1 md:grid-cols-2 {{ $grid_class }} mt-16">
+		<div class="__repeater grid grid-cols-1 gap-8 md:grid-cols-2 {{ $grid_class }} mt-12">
 
 			@foreach ($r_proces as $item)
-			<div data-gsap-element="stagger" class="flex flex-col bg-primary radius p-6">
-				<div class="relative z-20">
-					<div class="text-h2">{{ $item['number'] }}</div>
-					<img class="" src="{{ $item['image']['url'] }}" alt="{{ $item['image']['alt'] ?? '' }}" />
-
-					<p class="text-h6 mt-4">{{ $item['title'] }}</p>
-					<p class="mt-2">{!! $item['txt'] !!}</p>
+			<div data-gsap-element="stagger" class="relative h-full bg-background radius p-6 pt-28">
+				@if (!empty($item['image']['ID']))
+				<div class="pointer-events-none absolute bottom-4 right-4 z-0 opacity-20">
+					{!! wp_get_attachment_image($item['image']['ID'], 'medium', false, ['class' => 'h-40 w-40 object-contain', 'alt' => '']) !!}
+				</div>
+				@endif
+				<span
+					aria-hidden="true"
+					@class([
+						'absolute left-0 top-0 z-10 h-14 w-14 rounded-br-xl',
+						'bg-gradient-light' => $background === 'section-gradient-light',
+						'bg-secondary-dark' => $background !== 'section-gradient-light',
+					])></span>
+				<div class="absolute left-0 top-0 z-20 h-12 w-12">
+					<span class="absolute inset-0 flex items-center justify-center rounded-lg bg-primary text-h5 text-white">
+						{{ !empty($item['number']) ? $item['number'] : $loop->iteration }}
+					</span>
+				</div>
+				<div class="relative  z-10">
+					@if (!empty($item['title']))
+					<p class="text-h6 text-white!">{{ $item['title'] }}</p>
+					@endif
+					@if (!empty($item['txt']))
+					<div class="__txt [&_p]:text-white! mt-2">{!! $item['txt'] !!}</div>
+					@endif
 				</div>
 			</div>
 			@endforeach
 		</div>
-		<div class="__line absolute bg-primary z-0 origin-left scale-x-0"></div>
 		@endif
 	</div>
 

@@ -4,6 +4,7 @@ namespace App\Blocks;
 
 use Log1x\AcfComposer\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
+use App\Support\SectionBackgrounds;
 use App\Support\SectionClasses;
 
 class Cta extends Block
@@ -14,7 +15,7 @@ class Cta extends Block
 	public $category = 'formatting';
 	public $icon = 'button';
 	public $keywords = ['cta'];
-	public $mode = 'edit';
+	public $mode = 'auto';
 	public $supports = [
 		'align' => false,
 		'mode' => true,
@@ -35,6 +36,7 @@ class Cta extends Block
 				'ui' => 1,
 				'ui_on_text' => 'Tak',
 				'ui_off_text' => 'Nie',
+				'default_value' => 1,
 			])
 			->addTrueFalse('content', [
 				'label' => 'Inna treść',
@@ -96,16 +98,8 @@ class Cta extends Block
 			])
 			->addSelect('background', [
 				'label' => 'Kolor tła',
-				'choices' => [
-					'none' => 'Brak (domyślne)',
-					'section-white' => 'Białe',
-					'section-light' => 'Jasne',
-					'section-gray' => 'Szare',
-					'section-brand' => 'Marki',
-					'section-gradient' => 'Gradient',
-					'section-dark' => 'Ciemne',
-				],
-				'default_value' => 'none',
+				'choices' => SectionBackgrounds::choices(),
+				'default_value' => 'section-gradient',
 				'ui' => 0, // Ulepszony interfejs
 				'allow_null' => 0,
 			]);

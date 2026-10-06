@@ -4,6 +4,7 @@ namespace App\Blocks;
 
 use Log1x\AcfComposer\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
+use App\Support\SectionBackgrounds;
 use App\Support\SectionClasses;
 
 class Offers extends Block
@@ -14,7 +15,7 @@ class Offers extends Block
 	public $category = 'formatting';
 	public $icon = 'screenoptions';
 	public $keywords = ['tresc', 'zdjecie', 'oferta'];
-	public $mode = 'edit';
+	public $mode = 'auto';
 	public $supports = [
 		'align' => false,
 		'mode' => true,
@@ -32,6 +33,11 @@ class Offers extends Block
 			/*--- GROUP ---*/
 			->addTab('Elementy', ['placement' => 'top'])
 			->addGroup('g_offers', ['label' => ''])
+			->addText('header', ['label' => 'Nagłówek'])
+			->addLink('button', [
+				'label' => 'Przycisk',
+				'return_format' => 'array',
+			])
 			->addMessage('Informacja', 'Ten blok automatycznie wyświetla podstrony oferty przypisane do bieżącej strony nadrzędnej. Aby zarządzać elementami, przejdź do sekcji „Oferta" w panelu administratora i dodaj lub edytuj podstrony podrzędne.')
 			->endGroup()
 
@@ -44,11 +50,18 @@ class Offers extends Block
 			->addText('section_class', [
 				'label' => 'Dodatkowe klasy CSS',
 			])
-			->addTrueFalse('bgshape', [
-				'label' => 'Kształt w tle',
+			->addTrueFalse('gfx', [
+				'label' => 'Pokaż grafikę w tle',
+				'default_value' => 0,
 				'ui' => 1,
 				'ui_on_text' => 'Tak',
 				'ui_off_text' => 'Nie',
+			])
+			->addImage('gfximg', [
+				'label' => 'Grafika tła',
+				'return_format' => 'array',
+				'preview_size' => 'thumbnail',
+				'conditional_logic' => [[['field' => 'gfx', 'operator' => '==', 'value' => '1']]],
 			])
 			->addTrueFalse('nolist', [
 				'label' => 'Brak punktatorów',
@@ -82,14 +95,7 @@ class Offers extends Block
 			])
 			->addSelect('background', [
 				'label' => 'Kolor tła',
-				'choices' => [
-					'none' => 'Brak (domyślne)',
-					'section-white' => 'Białe',
-					'section-light' => 'Jasne',
-					'section-brand' => 'Marki',
-					'section-gradient' => 'Gradient',
-					'section-dark' => 'Ciemne',
-				],
+				'choices' => SectionBackgrounds::choices(),
 				'default_value' => 'none',
 				'ui' => 0, // Ulepszony interfejs
 				'allow_null' => 0,
@@ -133,7 +139,9 @@ class Offers extends Block
 			'section_id'   => get_field('section_id'),
 			'section_class' => get_field('section_class'),
 
-			'bgshape' => (bool) get_field('bgshape'),
+			'gfx' => (bool) get_field('gfx'),
+			'gfximg' => get_field('gfximg'),
+
 			'flip'    => (bool) get_field('flip'),
 			'wide'    => (bool) get_field('wide'),
 			'nomt'    => (bool) get_field('nomt'),

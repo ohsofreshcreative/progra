@@ -3,17 +3,22 @@
 <section
 	data-gsap-anim="section"
 	@if(!empty($section_id)) id="{{ $section_id }}" @endif
-	@class([ 'b-content relative -smt overflow-hidden' ,
+	@class([ 'b-content relative -smt' ,
 	$sectionClass=> filled($sectionClass),
 	$section_class => filled($section_class),
 	$background => filled($background) && $background !== 'none',
 	])>
 
-	@if ($bgshape)
-		<img class="__bg-shape absolute inset-y-0 right-0 w-auto pointer-events-none" src="{{ get_template_directory_uri() }}/resources/images/bg-shape.svg" alt="">
-	@endif
-
 	<div class="__wrapper c-main relative">
+
+		@if ($gfx && !empty($gfximg['url']))
+		<img
+			data-gsap-element="header"
+			class="__gfx pointer-events-none absolute opacity-40 top-0 -left-20 -translate-y-1/6 z-0"
+			src="{{ $gfximg['url'] }}"
+			alt=""
+			aria-hidden="true">
+		@endif
 
 		<div class="__col grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-20">
 			@if (!empty($g_content['image']))
@@ -25,6 +30,9 @@
 			@endif
 
 			<div class="__content order2">
+				@if (!empty($g_content['label']))
+				<p data-gsap-element="header" class="__title">{{ $g_content['label'] }}</p>
+				@endif
 				<h2 data-gsap-element="header" class="text-h4 m-header text-primary">{{ $g_content['header'] }}</h2>
 
 				<div data-gsap-element="txt" class="__txt">

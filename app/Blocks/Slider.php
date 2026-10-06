@@ -4,119 +4,87 @@ namespace App\Blocks;
 
 use Log1x\AcfComposer\Block;
 use StoutLogic\AcfBuilder\FieldsBuilder;
+use App\Support\SectionBackgrounds;
 use App\Support\SectionClasses;
 
 class Slider extends Block
 {
-    public $name = 'Slider - Oferta';
-    public $description = 'slider';
-    public $slug = 'slider';
-    public $category = 'formatting';
-    public $icon = 'image-flip-horizontal';
-    public $keywords = ['slider', 'oferta'];
-    public $mode = 'edit';
-    public $supports = [
-        'align' => false,
-        'mode' => true,
-        'jsx' => true,
-    ];
+	public $name = 'Slider';
+	public $description = 'slider';
+	public $slug = 'slider';
+	public $category = 'formatting';
+	public $icon = 'image-flip-horizontal';
+	public $keywords = ['slider', 'tresc', 'zdjecie'];
+	public $mode = 'edit';
+	public $supports = [
+		'align' => false,
+		'mode' => true,
+		'jsx' => true,
+	];
 
-    public function fields()
-    {
-        $slider = new FieldsBuilder('slider');
+	public function fields()
+	{
+		$slider = new FieldsBuilder('slider');
 
-        $slider
-            ->setLocation('block', '==', 'acf/slider')
-            ->addTab('Treści', ['placement' => 'top'])
-            ->addText('slider_title', ['label' => 'Tytuł sekcji'])
-            ->addRelationship('slider_offers', [
-                'label'         => 'Wpisy oferty (kolejność ma znaczenie)',
-                'post_type'     => ['offer'],
-                'filters'       => ['search'],
-                'return_format' => 'object',
-                'instructions'  => 'Wybierz i ułóż wpisy oferty w dowolnej kolejności. Jeśli pole jest puste, wyświetlą się wszystkie automatycznie.',
-            ])
+		$slider
+			->setLocation('block', '==', 'acf/slider')
+			->addTab('Treści', ['placement' => 'top'])
+			->addText('slider_title', ['label' => 'Nagłówek sekcji'])
+			->addRepeater('r_slider', [
+				'label' => 'Slajdy',
+				'layout' => 'table',
+				'min' => 1,
+				'button_label' => 'Dodaj slajd',
+			])
+			->addImage('image', [
+				'label' => 'Zdjęcie',
+				'return_format' => 'array',
+				'preview_size' => 'thumbnail',
+			])
+			->addText('header', ['label' => 'Nagłówek'])
+			->addWysiwyg('text', [
+				'label' => 'Treść',
+				'tabs' => 'all',
+				'toolbar' => 'full',
+				'media_upload' => true,
+			])
+			->endRepeater()
 
-            ->addTab('Ustawienia bloku', ['placement' => 'top'])
-            ->addText('section_id', ['label' => 'ID'])
-            ->addText('section_class', ['label' => 'Dodatkowe klasy CSS'])
-            ->addTrueFalse('nomt', [
-                'label' => 'Usunięcie marginesu górnego',
-                'ui' => 1,
-                'ui_on_text' => 'Tak',
-                'ui_off_text' => 'Nie',
-            ])
-			->addTrueFalse('bgshape', [
-				'label' => 'Kształt w tle',
+			->addTab('Ustawienia bloku', ['placement' => 'top'])
+			->addText('section_id', ['label' => 'ID'])
+			->addText('section_class', ['label' => 'Dodatkowe klasy CSS'])
+			->addTrueFalse('nomt', [
+				'label' => 'Usunięcie marginesu górnego',
 				'ui' => 1,
 				'ui_on_text' => 'Tak',
 				'ui_off_text' => 'Nie',
 			])
-            ->addSelect('background', [
-                'label' => 'Kolor tła',
-                'choices' => [
-                    'none'              => 'Brak (domyślne)',
-                    'section-white'     => 'Białe',
-                    'section-light'     => 'Jasne',
-                    'section-gray'      => 'Szare',
-                    'section-brand'     => 'Marki',
-                    'section-gradient'  => 'Gradient',
-                    'section-dark'      => 'Ciemne',
-                ],
-                'default_value' => 'none',
-                'ui' => 0,
-                'allow_null' => 0,
-            ]);
+			->addSelect('background', [
+				'label' => 'Kolor tła',
+				'choices' => SectionBackgrounds::choices(),
+				'default_value' => 'none',
+				'ui' => 0,
+				'allow_null' => 0,
+			]);
 
-        return $slider;
-    }
+		return $slider;
+	}
 
-    public function with(): array
-    {
-        $selected = get_field('slider_offers') ?: [];
+	public function with(): array
+	{
+		$fields = [
+			'slides' => get_field('r_slider') ?: [],
+			'slider_title' => get_field('slider_title'),
+			'section_id' => get_field('section_id'),
+			'section_class' => get_field('section_class'),
+			'nomt' => (bool) get_field('nomt'),
+			'background' => get_field('background') ?: 'none',
+		];
 
-        if (empty($selected)) {
-            $offers_query = new \WP_Query([
-                'post_type'      => 'offer',
-                'post_parent'    => 0,
-                'posts_per_page' => -1,
-                'orderby'        => 'menu_order',
-                'order'          => 'ASC',
-                'post_status'    => 'publish',
-            ]);
-            $selected = $offers_query->posts;
-            wp_reset_postdata();
-        }
+		$fields['sectionClass'] = SectionClasses::fromMap($fields, [
+			'nomt' => '!mt-0',
+		]);
 
-        $slides = [];
-        foreach ($selected as $post) {
-            $thumb_id = get_post_thumbnail_id($post->ID);
-            $icon     = get_field('offer_icon', $post->ID);
-            $slides[] = [
-                'title'     => $post->post_title,
-                'excerpt'   => get_the_excerpt($post),
-                'url'       => get_permalink($post->ID),
-                'image_url' => $thumb_id ? wp_get_attachment_image_url($thumb_id, 'large') : null,
-                'image_alt' => $thumb_id ? get_post_meta($thumb_id, '_wp_attachment_image_alt', true) : '',
-                'icon_url'  => $icon['url'] ?? null,
-                'icon_alt'  => $icon['alt'] ?? '',
-            ];
-        }
-
-        $fields = [
-            'slides'       => $slides,
-            'slider_title' => get_field('slider_title'),
-            'section_id'   => get_field('section_id'),
-            'section_class' => get_field('section_class'),
-            'nomt'         => (bool) get_field('nomt'),
-			'bgshape' => (bool) get_field('bgshape'),
-            'background'   => get_field('background') ?: 'none',
-        ];
-
-        $fields['sectionClass'] = SectionClasses::fromMap($fields, [
-            'nomt' => '!mt-0',
-        ]);
-
-        return $fields;
-    }
+		return $fields;
+	}
 }

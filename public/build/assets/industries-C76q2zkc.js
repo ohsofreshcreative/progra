@@ -1,0 +1,1 @@
+import{r as e,t}from"./swiper-Ds3omFCz.js";/* empty css                   */document.querySelectorAll(`.industries-swiper`).forEach(n=>{new e(n,{modules:[t],loop:!1,grabCursor:!0,slidesPerView:`auto`,spaceBetween:24,navigation:{nextEl:n.querySelector(`.__next`),prevEl:n.querySelector(`.__prev`)}})});

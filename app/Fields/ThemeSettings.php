@@ -42,7 +42,16 @@ class ThemeSettings extends Field
 			->addText('email', [
 				'label' => 'Adres E-mail',
 			])
-			->endGroup();
+			->endGroup()
+
+			->addTab('Diagnostyka', ['placement' => 'top'])
+			->addTrueFalse('show_block_labels', [
+				'label' => 'Pokaż etykiety bloków na stronie',
+				'instructions' => 'Etykiety są widoczne tylko dla administratorów.',
+				'ui' => 1,
+				'ui_on_text' => 'Tak',
+				'ui_off_text' => 'Nie',
+			]);
 
 		return [$theme];
 	}

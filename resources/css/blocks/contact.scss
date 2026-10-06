@@ -15,7 +15,7 @@
 	}
 
 	.__phone::before {
-		content: url("@images/phone.svg");
+		content: url('/resources/images/phone.svg');
 		margin-right: 16px;
 		position: relative;
 		top: 4px;
@@ -27,7 +27,7 @@
 	}
 
 	.__mail::before {
-		content: url('@images/mail.svg');
+		content: url('/resources/images/mail.svg');
 		margin-right: 16px;
 		position: relative;
 		top: 4px;
@@ -35,10 +35,15 @@
 	}
 
 	.__address::before {
-		content: url('/wp-content/uploads/2026/01/place.svg');
-		margin-right: 16px;
+		content: url('/resources/images/place.svg');
 		position: relative;
 		top: 4px;
-		max-width: 40px;
+	}
+
+	.__address {
+		display: grid;
+		grid-template-columns: 32px minmax(0, 1fr);
+		column-gap: 16px;
+		align-items: start;
 	}
 }
