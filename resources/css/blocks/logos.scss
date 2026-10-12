@@ -5,6 +5,10 @@
 			animation: infinite-scroll 35s linear infinite;
 		}
 
+  .animate-infinite-scroll-reverse {
+    animation-direction: reverse;
+  }
+
 		.animate-infinite-scroll:hover {
 			animation-play-state: paused;
 		}

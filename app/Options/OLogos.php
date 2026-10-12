@@ -22,11 +22,18 @@ class OLogos extends Options
             ->addGroup('g_logos', ['label' => ''])
             ->addText('header', ['label' => 'Tytuł'])
             ->addGallery('gallery', [
-                'label'        => 'Logotypy',
+                'label'        => 'Logotypy — pierwszy rząd',
+                'return_format' => 'array',
                 'preview_size' => 'thumbnail',
                 'library'      => 'all',
                 'min'          => 1,
             ])
+			->addGallery('gallery_second', [
+				'label' => 'Logotypy — drugi rząd',
+				'return_format' => 'array',
+				'preview_size' => 'thumbnail',
+				'library' => 'all',
+			])
             ->endGroup();
 
         return $logos;

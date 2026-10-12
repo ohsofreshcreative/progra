@@ -9,17 +9,22 @@
 		@include('partials.block-preview-settings')
 	</div>
 	<div class="acf-preview__content">
-		<div class="acf-preview__logo-list flex flex-wrap items-center">
-			@foreach (array_slice((array) ($g_logos['gallery'] ?? []), 0, 8) as $image)
-			@if (!empty($image['ID']))
-			{!! wp_get_attachment_image($image['ID'], 'thumbnail', false, ['class' => 'h-16 w-auto object-contain']) !!}
-			@endif
-			@endforeach
-		</div>
+    @foreach (['gallery' => 'Pierwszy rząd', 'gallery_second' => 'Drugi rząd'] as $galleryField => $label)
+      @if (!empty($g_logos[$galleryField]))
+        <p>{{ $label }}</p>
+        <div class="acf-preview__logo-list flex flex-wrap items-center">
+          @foreach (array_slice((array) $g_logos[$galleryField], 0, 8) as $image)
+            @if (!empty($image['ID']))
+              {!! wp_get_attachment_image($image['ID'], 'thumbnail', false, ['class' => 'h-16 w-auto object-contain']) !!}
+            @endif
+          @endforeach
+        </div>
+      @endif
+    @endforeach
 		@if (!empty($g_logos['header']))
 		<p class="text-h5">{{ $g_logos['header'] }}</p>
 		@endif
-		@if (empty($g_logos['gallery']))
+		@if (empty($g_logos['gallery']) && empty($g_logos['gallery_second']))
 		<p>Logotypy są zarządzane w panelu „Logotypy partnerów”.</p>
 		@endif
 	</div>

@@ -5,6 +5,10 @@
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{{-- Zwinięte menu ustawiamy przed renderem, żeby po przejściu na podstronę nie animowało się zwijanie --}}
+	<script>
+		try { if (localStorage.getItem('menuCollapsed') === '1') document.documentElement.classList.add('menu-collapsed') } catch (e) {}
+	</script>
 	@php(do_action('get_header'))
 	@php(wp_head())
 

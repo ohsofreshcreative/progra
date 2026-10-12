@@ -40,31 +40,6 @@ add_filter('acf/register_block_type_args', function ($block) {
 	return $block;
 });
 
-add_filter('render_block', function ($block_content, $block) {
-	if (! str_starts_with($block['blockName'] ?? '', 'acf/')) {
-		return $block_content;
-	}
-
-	static $showBlockLabels = null;
-	if ($showBlockLabels === null) {
-		$showBlockLabels = function_exists('get_field') && (bool) get_field('show_block_labels', 'option');
-	}
-
-	if (! $showBlockLabels || is_admin() || ! current_user_can('manage_options') || ! class_exists('WP_HTML_Tag_Processor')) {
-		return $block_content;
-	}
-
-	$processor = new \WP_HTML_Tag_Processor($block_content);
-	if (! $processor->next_tag()) {
-		return $block_content;
-	}
-
-	$processor->add_class('has-acf-block-label');
-	$processor->set_attribute('data-acf-block-label', $block['blockName']);
-
-	return $processor->get_updated_html();
-}, 10, 2);
-
 /**
  * Inject scripts into the block editor.
  *

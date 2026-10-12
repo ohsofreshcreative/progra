@@ -5,12 +5,15 @@ use App\Walkers\MobileDropdownWalker;
 <header
 	x-data="{
 		mobileOpen: false,
-		desktopOpen: true,
+		desktopOpen: (() => { try { return localStorage.getItem('menuCollapsed') !== '1' } catch (e) { return true } })(),
 		isDesktop: window.matchMedia('(min-width: 769px)').matches,
 		get menuOpen() { return this.isDesktop ? this.desktopOpen : this.mobileOpen },
 		toggleMenu() {
-			if (this.isDesktop) this.desktopOpen = !this.desktopOpen;
-			else this.mobileOpen = !this.mobileOpen;
+			if (this.isDesktop) {
+				this.desktopOpen = !this.desktopOpen;
+				try { localStorage.setItem('menuCollapsed', this.desktopOpen ? '0' : '1') } catch (e) {}
+				document.documentElement.classList.toggle('menu-collapsed', !this.desktopOpen);
+			} else this.mobileOpen = !this.mobileOpen;
 		},
 		init() {
 			this.viewport = window.matchMedia('(min-width: 769px)');
@@ -62,7 +65,7 @@ use App\Walkers\MobileDropdownWalker;
 			</button>
 		</div>
 
-		<div id="mobile-menu-panel" x-show="menuOpen" class="px-6 pb-6 overflow-y-auto">
+		<div id="mobile-menu-panel" class="px-3 pb-6 overflow-y-auto" :class="{ '!px-1': !menuOpen }">
 			@if (has_nav_menu('primary_navigation'))
 			<nav aria-label="{{ wp_get_nav_menu_name('primary_navigation') }}">
 				{!! wp_nav_menu([
@@ -75,7 +78,7 @@ use App\Walkers\MobileDropdownWalker;
 			</nav>
 			@endif
 
-			<div class="mt-8">
+			<div x-show="menuOpen" class="mt-8 px-3">
 				<a href="tel:413114466" class="block w-full btn btn-primary">41 311 44 66</a>
 			</div>
 		</div>

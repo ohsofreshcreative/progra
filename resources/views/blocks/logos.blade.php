@@ -13,19 +13,22 @@
 	</div>
 	@endif
 
-	@if (!empty($g_logos['gallery']))
-	<div class="relative w-full overflow-hidden">
-
-		<div class="flex w-max items-center animate-infinite-scroll py-2">
-
-			@for ($copy = 0; $copy < 4; $copy++)
-				@foreach ($g_logos['gallery'] as $image)
-				<div class="flex items-center justify-center w-48 h-24 shrink-0 mr-8" @if($copy> 0) aria-hidden="true" @endif>
-				<img src="{{ $image['url'] }}" alt="{{ $image['alt'] ?? '' }}" class="max-h-12 w-auto max-w-[80%] object-contain transition-all duration-300 grayscale-100">
-		</div>
-		@endforeach
-		@endfor
-	</div>
-	</div>
-	@endif
+  @foreach (['gallery', 'gallery_second'] as $row => $galleryField)
+    @if (!empty($g_logos[$galleryField]))
+      <div class="relative w-full overflow-hidden">
+        <div @class([
+          'flex w-max items-center animate-infinite-scroll py-2',
+          'animate-infinite-scroll-reverse' => $row > 0,
+        ])>
+          @for ($copy = 0; $copy < 4; $copy++)
+            @foreach ($g_logos[$galleryField] as $image)
+              <div class="flex items-center justify-center w-48 h-24 shrink-0 mr-8" @if ($copy > 0) aria-hidden="true" @endif>
+                <img src="{{ $image['url'] }}" alt="{{ $image['alt'] ?? '' }}" class="max-h-12 w-auto max-w-[80%] object-contain transition-all duration-300 grayscale-100">
+              </div>
+            @endforeach
+          @endfor
+        </div>
+      </div>
+    @endif
+  @endforeach
 </section>

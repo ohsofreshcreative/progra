@@ -141,25 +141,6 @@
 
 }
 
-@layer components {
-  .has-acf-block-label {
-    position: relative;
-  }
-
-  .has-acf-block-label::before {
-    content: attr(data-acf-block-label);
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    z-index: 50;
-    padding: 0.25rem 0.5rem;
-    color: white;
-    background: rgb(var(--primary));
-    font: 12px/1.2 sans-serif;
-    pointer-events: none;
-  }
-}
-
 @utility m-header {
   margin-bottom: var(--m-header);
 }
